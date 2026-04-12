@@ -1,0 +1,83 @@
+#include <Arduino.h>
+
+// ===== CONFIG =====
+static const uint8_t PINS[4] = {A0, A1, A2, A3};
+
+static const uint16_t SAMPLE_HZ = 1000;
+static const uint8_t PRINT_EVERY_N = 5;
+
+static const uint32_t BASELINE_MS = 1500;
+
+// Optional smoothing (0 = off)
+static const float ALPHA = 0.10f;
+
+// ===== GLOBALS =====
+uint32_t lastSampleUs = 0;
+uint32_t sampleCount = 0;
+
+int baseline[4] = {512,512,512,512};
+float smoothMag[4] = {0,0,0,0};
+
+void calibrateBaseline() {
+  long sum[4] = {0};
+  long count = 0;
+
+  uint32_t start = millis();
+  while (millis() - start < BASELINE_MS) {
+    for (int i = 0; i < 4; i++) {
+      sum[i] += analogRead(PINS[i]);
+    }
+    count++;
+    delay(2);
+  }
+
+  if (count <= 0) count = 1;
+
+  for (int i = 0; i < 4; i++) {
+    baseline[i] = sum[i] / count;
+    smoothMag[i] = 0;
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  for (int i = 0; i < 4; i++) {
+    (void)analogRead(PINS[i]);
+    delay(5);
+  }
+
+  calibrateBaseline();
+  lastSampleUs = micros();
+}
+
+void loop() {
+  const uint32_t periodUs = 1000000UL / SAMPLE_HZ;
+  uint32_t nowUs = micros();
+
+  if (nowUs - lastSampleUs < periodUs) return;
+  lastSampleUs += periodUs;
+
+  int out[4];
+
+  for (int i = 0; i < 4; i++) {
+    int raw = analogRead(PINS[i]);
+    int delta = raw - baseline[i];
+    int magnitude = abs(delta);   // 🔥 Always positive
+
+    if (ALPHA > 0.0f && ALPHA < 1.0f) {
+      smoothMag[i] = (1.0f - ALPHA) * smoothMag[i] + ALPHA * magnitude;
+      out[i] = (int)smoothMag[i];
+    } else {
+      out[i] = magnitude;
+    }
+  }
+
+  sampleCount++;
+  if (sampleCount % PRINT_EVERY_N == 0) {
+    Serial.print(out[0]); Serial.print(",");
+    Serial.print(out[1]); Serial.print(",");
+    Serial.print(out[2]); Serial.print(",");
+    Serial.println(out[3]);
+  }
+}

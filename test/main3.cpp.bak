@@ -1,0 +1,69 @@
+#include <Arduino.h>
+
+// ===== CONFIG =====
+static const uint8_t HALL_PINS[5] = {A0, A1, A2, A3, A4};
+static const uint8_t SENSOR_COUNT = 5;
+
+static const uint32_t BASELINE_MS = 1500;
+static const uint16_t LOOP_HZ = 200;
+static const uint32_t PERIOD_US = 1000000UL / LOOP_HZ;
+
+// ===== GLOBALS =====
+int baseline[SENSOR_COUNT] = {512,512,512,512,512};
+uint32_t lastUs = 0;
+
+// =====================
+
+void calibrateBaseline() {
+  long sum[SENSOR_COUNT] = {0};
+  long count = 0;
+
+  uint32_t start = millis();
+  while (millis() - start < BASELINE_MS) {
+    for (uint8_t i = 0; i < SENSOR_COUNT; i++) {
+      sum[i] += analogRead(HALL_PINS[i]);
+    }
+    count++;
+    delay(2);
+  }
+
+  if (count <= 0) count = 1;
+
+  for (uint8_t i = 0; i < SENSOR_COUNT; i++) {
+    baseline[i] = sum[i] / count;
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(300);
+
+  // settle ADC
+  for (uint8_t i = 0; i < SENSOR_COUNT; i++) {
+    analogRead(HALL_PINS[i]);
+    delay(5);
+  }
+
+  calibrateBaseline();
+  lastUs = micros();
+}
+
+void loop() {
+  uint32_t now = micros();
+  if (now - lastUs < PERIOD_US) return;
+  lastUs += PERIOD_US;
+
+  for (uint8_t i = 0; i < SENSOR_COUNT; i++) {
+    int raw = analogRead(HALL_PINS[i]);
+    int delta = abs(raw - baseline[i]);
+
+    Serial.print(raw);
+    Serial.print(",");
+    Serial.print(delta);
+
+    if (i < SENSOR_COUNT - 1)
+      Serial.print(",");
+  }
+
+  Serial.println();
+}

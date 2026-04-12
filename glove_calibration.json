@@ -1,0 +1,37 @@
+{
+  "fingers": {
+    "pinkie": {
+      "open_raw": 1896.59900990099,
+      "closed_raw": 1875.9757281553398,
+      "invert": true,
+      "dip_ratio": 0.38,
+      "pip_ratio": 0.62
+    },
+    "ring": {
+      "open_raw": 1962.0346534653465,
+      "closed_raw": 1982.9077669902913,
+      "invert": false,
+      "dip_ratio": 0.38,
+      "pip_ratio": 0.62
+    },
+    "middle": {
+      "open_raw": 1905.3663366336634,
+      "closed_raw": 1920.0533980582525,
+      "invert": false,
+      "dip_ratio": 0.38,
+      "pip_ratio": 0.62
+    },
+    "index": {
+      "open_raw": 1888.7623762376238,
+      "closed_raw": 1841.5728155339805,
+      "invert": true,
+      "dip_ratio": 0.38,
+      "pip_ratio": 0.62
+    }
+  },
+  "thumb": {
+    "threshold": 0.0,
+    "open_deg": 12,
+    "closed_deg": 52
+  }
+}

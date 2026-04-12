@@ -1,0 +1,55 @@
+#include <Arduino.h>
+#include <Servo.h>
+
+// ---- CONFIG ----
+static const uint8_t SERVO_PINS[5] = {3, 5, 6, 9, 10}; // change if needed
+static const uint8_t SERVO_COUNT = 5;
+
+// Optional: microsecond limits.
+// If your servos buzz or hit stops, tighten these (e.g. 800–2200).
+static const int SERVO_MIN_US = 500;
+static const int SERVO_MAX_US = 2500;
+
+// ---- GLOBALS ----
+Servo servos[SERVO_COUNT];
+
+void attachServos() {
+  for (uint8_t i = 0; i < SERVO_COUNT; i++) {
+    servos[i].attach(SERVO_PINS[i], SERVO_MIN_US, SERVO_MAX_US);
+  }
+}
+
+void moveAll(uint8_t angle) {
+  for (uint8_t i = 0; i < SERVO_COUNT; i++) {
+    servos[i].write(angle);
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(300);
+
+  Serial.println("Arduino Uno servo sweep test starting...");
+
+  attachServos();
+
+  // Move to mid first
+  moveAll(90);
+  delay(800);
+}
+
+void loop() {
+  // Open
+  for (int a = 0; a <= 180; a += 2) {
+    moveAll((uint8_t)a);
+    delay(10);
+  }
+  delay(300);
+
+  // Close
+  for (int a = 180; a >= 0; a -= 2) {
+    moveAll((uint8_t)a);
+    delay(10);
+  }
+  delay(500);
+}
