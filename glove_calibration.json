@@ -1,37 +1,37 @@
 {
   "fingers": {
     "pinkie": {
-      "open_raw": 1896.59900990099,
-      "closed_raw": 1875.9757281553398,
+      "open_raw": 1897.6153846153845,
+      "closed_raw": 1884.1232227488151,
       "invert": true,
-      "dip_ratio": 0.38,
-      "pip_ratio": 0.62
+      "dip_ratio": 0.27,
+      "pip_ratio": 0.46
     },
     "ring": {
-      "open_raw": 1962.0346534653465,
-      "closed_raw": 1982.9077669902913,
+      "open_raw": 1960.6634615384614,
+      "closed_raw": 1972.2985781990521,
       "invert": false,
-      "dip_ratio": 0.38,
-      "pip_ratio": 0.62
+      "dip_ratio": 0.27,
+      "pip_ratio": 0.46
     },
     "middle": {
-      "open_raw": 1905.3663366336634,
-      "closed_raw": 1920.0533980582525,
+      "open_raw": 1906.7211538461538,
+      "closed_raw": 1913.222748815166,
       "invert": false,
-      "dip_ratio": 0.38,
-      "pip_ratio": 0.62
+      "dip_ratio": 0.27,
+      "pip_ratio": 0.46
     },
     "index": {
-      "open_raw": 1888.7623762376238,
-      "closed_raw": 1841.5728155339805,
+      "open_raw": 1891.423076923077,
+      "closed_raw": 1869.7345971563982,
       "invert": true,
-      "dip_ratio": 0.38,
-      "pip_ratio": 0.62
+      "dip_ratio": 0.27,
+      "pip_ratio": 0.46
     }
   },
   "thumb": {
     "threshold": 0.0,
-    "open_deg": 12,
-    "closed_deg": 52
+    "open_deg": 12.0,
+    "closed_deg": 52.0
   }
 }

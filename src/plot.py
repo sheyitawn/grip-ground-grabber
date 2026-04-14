@@ -6,7 +6,7 @@ import serial
 import matplotlib.pyplot as plt
 
 # ================= CONFIG =================
-DEFAULT_PORT = "COM17"      # change if needed
+DEFAULT_PORT = "COM17"      # CHANGE THIS!
 BAUD = 115200
 MAX_POINTS = 800
 UI_HZ = 60.0
